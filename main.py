@@ -16,10 +16,8 @@ class Bank:
                     self.lock.release()
             else:
                 add_accaunt = random.randint(50, 500)
-                self.lock.acquire()
                 self.balance += add_accaunt
                 print(f'Пополнение: {add_accaunt}. Баланс: {self.balance}')
-                self.lock.release()
             time.sleep(0.001)
 
     def take(self):
@@ -27,14 +25,11 @@ class Bank:
             sub_account = random.randint(50, 500)
             print(f'Запрос на снятие {sub_account}')
             if self.balance < sub_account:
-                if self.lock.locked():
-                    self.lock.release()
-                print('Запрос отклонён, недостаточно средств')
-            else:
                 if not self.lock.locked():
                     self.lock.acquire()
-                    self.balance -= sub_account
-                    self.lock.release()
+                print('Запрос отклонён, недостаточно средств')
+            else:
+                self.balance -= sub_account
                 print(f'Снятие: {sub_account}. Баланс: {self.balance}')
             time.sleep(0.001)
 
